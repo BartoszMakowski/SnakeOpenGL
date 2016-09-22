@@ -1,0 +1,48 @@
+﻿Build started 22-Sep-16 9:11:29 PM.
+     1>Project "C:\Users\Speego\Desktop\Snake\Snake\Snake.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Camera.cpp main.cpp RenderManager.cpp Shader.cpp Ground.cpp
+         Camera.cpp
+         main.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 c:\users\speego\desktop\snake\snake\GLFW\glfw3.h(98) : see previous definition of 'APIENTRY'
+         RenderManager.cpp
+     1>RenderManager.cpp(86): warning C4316: 'Ground' : object allocated on the heap may not be aligned 16
+     1>RenderManager.cpp(151): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>RenderManager.cpp(152): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+         Shader.cpp
+         Ground.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Speego\Desktop\Snake\Release\Snake.exe" /INCREMENTAL:NO /NOLOGO opengl32.lib freeglut.lib glew32s.lib glfw3.lib SOIL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Speego\Desktop\Snake\Release\Snake.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Speego\Desktop\Snake\Release\Snake.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
+         Release\main.obj
+         Release\RenderManager.obj
+         Release\Shader.obj
+         Release\Ground.obj
+     1>SOIL.lib(SOIL.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification
+     1>LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+         Generating code
+         Finished generating code
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewAttachShader imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewCreateProgram imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewGetProgramInfoLog imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewGetShaderiv imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewGetProgramiv imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewShaderSource imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewUseProgram imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewCompileShader imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewLinkProgram imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewGetShaderInfoLog imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewCreateShader imported
+     1>Shader.obj : warning LNK4049: locally defined symbol ___glewDeleteShader imported
+     1>glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\Speego\Desktop\Snake\Release\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\Speego\Desktop\Snake\Release\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\Speego\Desktop\Snake\Release\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\Speego\Desktop\Snake\Release\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\Speego\Desktop\Snake\Release\vc120.pdb'; linking object as if no debug info
+         Snake.vcxproj -> C:\Users\Speego\Desktop\Snake\Release\Snake.exe
+     1>Done Building Project "C:\Users\Speego\Desktop\Snake\Snake\Snake.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.07
