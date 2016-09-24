@@ -23,27 +23,30 @@ Ground::Ground() {
 	shader = new Shader(GROUNDVERTEXSHADERPATH, GROUNDFRAGMENTSHADERPATH);
 	generateBuffer();
 	interpretVertexData();
-	transformCoordinates();
+	model = rotate(model, glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
+	model = scale(model, vec3(7.0f, 3.0f, 5.0f));
 }
 
 Ground::~Ground() {
 	delete shader;
-	delete image;
 }
 
-void Ground::draw() {
+void Ground::draw(mat4* view, mat4* projection) {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	shader->Use();
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+	transformCoordinates(view, projection);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
-void Ground::transformCoordinates() {
-	transform = glm::rotate(transform, glm::radians(45.0f), vec3(0.0f, 0.0f, 1.0f));
-	transform = glm::scale(transform, vec3(0.5f, 0.5f, 0.5f));
-	transformLoc = glGetUniformLocation(shader->Program, "transform");
+void Ground::transformCoordinates(mat4* view, mat4* projection) {
+	modelLoc = glGetUniformLocation(shader->Program, "model");
+	viewLoc = glGetUniformLocation(shader->Program, "view");
+	projectionLoc = glGetUniformLocation(shader->Program, "projection");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*view));
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(*projection));
 }
 
 void Ground::generateBuffer() {

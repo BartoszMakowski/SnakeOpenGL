@@ -23,6 +23,8 @@ int main()
 	if (!render->initGLEW())
 		return -1;
 	render->setViewport();
+	render->setDepthBuffer();
+	render->setMatrixes();
 	render->createObjects();
 
 	render->gameLoop();

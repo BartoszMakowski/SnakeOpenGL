@@ -12,9 +12,11 @@
 #include "Shader.h"
 #include "Ground.h"
 #include "Camera.h"
+#include "Cube.h"
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 GLfloat vertices[];
 
@@ -38,7 +40,9 @@ public:
 	void setKeyCallback();
 	bool initGLEW();
 	void setViewport();
+	void setDepthBuffer();
 	void manageShaders();
+	void setMatrixes();
 	void createObjects();
 	void releaseResources();
 
@@ -54,6 +58,8 @@ private:
 	void changeColor();
 	void loadTriangleTexture();
 
+	void createCubes();
+
 	GLFWwindow* window;
 	// shaders
 	GLuint VAO;
@@ -65,8 +71,8 @@ private:
 	GLint success;
 	GLchar infoLog[512];
 	// attributes of window
-	static const int HEIGHT = 860;
-	static const int WIDTH = 1024;
+	static const int HEIGHT = 1000;
+	static const int WIDTH = 1600;
 	static const char* TITLE;
 	// view port variables
 	int width;
@@ -80,8 +86,13 @@ private:
 	unsigned char* image;
 	// transformation
 	GLint transformLoc;
+	GLint viewLoc;
+	GLint projectionLoc;
+	mat4 view;
+	mat4 projection;
 	// objects
 	Ground* ground;
+	Cube* cubes;
 };
 
 #endif RENDERMANAGER_H

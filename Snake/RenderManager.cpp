@@ -36,7 +36,8 @@ RenderManager::RenderManager() {
 
 }
 RenderManager::~RenderManager() {
-
+	delete ground;
+	delete cubes;
 }
 
 void RenderManager::initGLFW() {
@@ -76,14 +77,25 @@ void RenderManager::setViewport() {
 	glViewport(0, 0, width, height);
 }
 
+void RenderManager::setDepthBuffer() {
+	glEnable(GL_DEPTH_TEST);
+}
+
 void RenderManager::manageShaders() {
 	//groundShader = Shader(TRIANGLEVERTEXSHADERPATH, TRIANGLEFRAGMENTSHADERPATH);
 	//generateBuffer();
 	//interpretVertexData();
 }
 
+void RenderManager::setMatrixes() {
+	view = translate(view, vec3(0.0f, 0.0f, -5.0f));
+	view = rotate(view, glm::radians(45.0f), vec3(1.0f, 0.0f, 0.0f));
+	projection = glm::perspective(45.0f, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+}
+
 void RenderManager::createObjects() {
 	ground = new Ground();
+	cubes = new Cube();
 }
 
 void RenderManager::releaseResources() {
@@ -96,14 +108,15 @@ void RenderManager::gameLoop() {
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		clearBuffer();
-		ground->draw();
+		ground->draw(&view, &projection);
+		cubes->draw(&view, &projection);
 		glfwSwapBuffers(window);
 	}
 }
 
 void RenderManager::clearBuffer() {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderManager::generateBuffer() {

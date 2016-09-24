@@ -12,7 +12,7 @@
 
 static const char* GROUNDVERTEXSHADERPATH = ".\\Shaders\\ground.vs";
 static const char* GROUNDFRAGMENTSHADERPATH = ".\\Shaders\\ground.frag";
-static const char* GROUNDIMAGEPATH = ".\\textures\\ground.png";
+static const char* GROUNDIMAGEPATH = ".\\textures\\sand.png";
 
 GLfloat groundVertices[];
 GLuint groundIndices[];
@@ -24,7 +24,7 @@ class Ground {
 public:
 	Ground();
 	~Ground();
-	void draw();
+	void draw(mat4*, mat4*);
 
 private:
 	// shaders
@@ -36,10 +36,12 @@ private:
 	GLuint texture;
 	unsigned char* image;
 	// transformation
-	mat4 transform;
-	GLint transformLoc;
+	mat4 model;
+	GLint modelLoc;
+	GLint viewLoc;
+	GLint projectionLoc;
 
-	void transformCoordinates();
+	void transformCoordinates(mat4*, mat4*);
 	void generateBuffer();
 	void interpretVertexData();
 	void loadTexture();
