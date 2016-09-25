@@ -11,6 +11,7 @@
 
 #include "Shader.h"
 #include "Ground.h"
+#include "Space.h"
 #include "Camera.h"
 #include "Cube.h"
 
@@ -52,6 +53,7 @@ private:
 	void clearBuffer();
 	void generateBuffer();
 	void interpretVertexData();
+	void updateTime();
 
 	void drawTriangle();
 
@@ -92,7 +94,13 @@ private:
 	mat4 projection;
 	// objects
 	Ground* ground;
+	Space* space;
 	Cube* cubes;
+	// camera
+	Camera* camera;
+	// time
+	GLfloat deltaTime;
+	GLfloat lastFrame;
 };
 
 #endif RENDERMANAGER_H

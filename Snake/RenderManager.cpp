@@ -7,6 +7,7 @@ static const char* TRIANGLEFRAGMENTSHADERPATH = ".\\Shaders\\triangle.frag";
 static const char* IMAGEPATH = ".\\textures\\ground.png";
 const char* RenderManager::TITLE = "Wonsz";
 
+bool keys[1024];
 
 GLfloat Mainvertices[] = { // with texture
 	0.5f, 0.5f, 0.0f,
@@ -30,14 +31,25 @@ GLuint Mainindices[] = {  // Note that we start from 0!
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+			keys[key] = true;
+		else if (action == GLFW_RELEASE)
+			keys[key] = false;
+	}
 }
 
 RenderManager::RenderManager() {
-
+	deltaTime = 0.0f;
+	lastFrame = 0.0f;
 }
+
 RenderManager::~RenderManager() {
 	delete ground;
+	delete space;
 	delete cubes;
+	delete camera;
 }
 
 void RenderManager::initGLFW() {
@@ -88,12 +100,12 @@ void RenderManager::manageShaders() {
 }
 
 void RenderManager::setMatrixes() {
-	view = translate(view, vec3(0.0f, 0.0f, -5.0f));
-	view = rotate(view, glm::radians(45.0f), vec3(1.0f, 0.0f, 0.0f));
+	camera = new Camera();
 	projection = glm::perspective(45.0f, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 }
 
 void RenderManager::createObjects() {
+	space = new Space();
 	ground = new Ground();
 	cubes = new Cube();
 }
@@ -106,8 +118,12 @@ void RenderManager::releaseResources() {
 
 void RenderManager::gameLoop() {
 	while (!glfwWindowShouldClose(window)) {
+		updateTime();
 		glfwPollEvents();
+		camera->move(keys, deltaTime);
+		view = camera->getViewMatrix();
 		clearBuffer();
+		space->draw(&view, &projection);
 		ground->draw(&view, &projection);
 		cubes->draw(&view, &projection);
 		glfwSwapBuffers(window);
@@ -141,6 +157,12 @@ void RenderManager::interpretVertexData() {
 	loadTriangleTexture();
 	// Wireframe mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+}
+
+void RenderManager::updateTime() {
+	GLfloat currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
 }
 
 void RenderManager::drawTriangle() {

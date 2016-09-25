@@ -1,8 +1,14 @@
-﻿Build started 24-Sep-16 7:38:56 PM.
+﻿Build started 25-Sep-16 5:20:04 PM.
      1>Project "C:\Users\Speego\Desktop\SnakeOpenGL\Snake\Snake.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D NDEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Cube.cpp
-         Cube.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D NDEBUG /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt RenderManager.cpp
+         RenderManager.cpp
+     1>c:\users\speego\desktop\snakeopengl\snake\rendermanager.cpp(108): warning C4316: 'Space' : object allocated on the heap may not be aligned 16
+     1>c:\users\speego\desktop\snakeopengl\snake\rendermanager.cpp(109): warning C4316: 'Ground' : object allocated on the heap may not be aligned 16
+     1>c:\users\speego\desktop\snakeopengl\snake\rendermanager.cpp(110): warning C4316: 'Cube' : object allocated on the heap may not be aligned 16
+     1>c:\users\speego\desktop\snakeopengl\snake\rendermanager.cpp(163): warning C4244: 'initializing' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\speego\desktop\snakeopengl\snake\rendermanager.cpp(186): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\speego\desktop\snakeopengl\snake\rendermanager.cpp(187): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Speego\Desktop\SnakeOpenGL\Debug\Snake.exe" /INCREMENTAL /NOLOGO opengl32.lib freeglut.lib glew32s.lib glfw3.lib SOIL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Speego\Desktop\SnakeOpenGL\Debug\Snake.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Speego\Desktop\SnakeOpenGL\Debug\Snake.lib" /MACHINE:X86 Debug\Camera.obj
          Debug\main.obj
@@ -10,9 +16,10 @@
          Debug\Shader.obj
          Debug\Ground.obj
          Debug\Cube.obj
+         Debug\Space.obj
          Snake.vcxproj -> C:\Users\Speego\Desktop\SnakeOpenGL\Debug\Snake.exe
      1>Done Building Project "C:\Users\Speego\Desktop\SnakeOpenGL\Snake\Snake.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.29
+Time Elapsed 00:00:01.04

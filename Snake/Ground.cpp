@@ -23,8 +23,9 @@ Ground::Ground() {
 	shader = new Shader(GROUNDVERTEXSHADERPATH, GROUNDFRAGMENTSHADERPATH);
 	generateBuffer();
 	interpretVertexData();
+	loadTexture();
 	model = rotate(model, glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
-	model = scale(model, vec3(7.0f, 3.0f, 5.0f));
+	model = scale(model, vec3(3.3f, 2.8f, 0.0f));
 }
 
 Ground::~Ground() {
@@ -67,7 +68,6 @@ void Ground::interpretVertexData() {
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
-	loadTexture();
 }
 
 void Ground::loadTexture() {

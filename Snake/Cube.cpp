@@ -94,6 +94,7 @@ Cube::Cube() {
 	shader = new Shader(CUBEVERETXSHADERPATH, CUBEFRAGMENTSHADERPATH);
 	generateBuffer();
 	interpretVertexData();
+	loadTexture();
 	scaleMultiplier = 0.15f;
 	baseModel = translate(baseModel, vec3(0.0f, scaleMultiplier, 0.0f));
 	baseModel = scale(baseModel, vec3(scaleMultiplier, scaleMultiplier, scaleMultiplier));
@@ -113,10 +114,10 @@ void Cube::draw(mat4* view, mat4* projection) {
 
 void Cube::drawCubes(mat4* view, mat4* projection) {
 	GLfloat translateMultiplier = scaleMultiplier * 13;
-	GLfloat zAxisFrontTranslate = 16.5f;
-	GLfloat xAxisLeftTranslate = -20.0f;
-	int numberOfBoxesInRow = 20;
-	int numberOfBoxesInColumn = 17;
+	GLfloat zAxisFrontTranslate = 18.5f;
+	GLfloat xAxisLeftTranslate = -24.0f;
+	int numberOfBoxesInRow = 24;
+	int numberOfBoxesInColumn = 18;
 
 	for (int i = 1; i <= numberOfBoxesInRow; i++) {
 		model = baseModel;
@@ -170,8 +171,6 @@ void Cube::interpretVertexData() {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
-
-	loadTexture();
 }
 
 void Cube::loadTexture() {

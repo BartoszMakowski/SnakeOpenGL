@@ -3,8 +3,10 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include "GL/glew.h"
+#include "GLFW\glfw3.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -12,7 +14,6 @@
 using std::vector;
 using glm::vec3;
 using glm::normalize;
-using glm::cross;
 using glm::mat4;
 using glm::lookAt;
 using glm::radians;
@@ -24,31 +25,24 @@ enum CameraMovement {
 	RIGHT
 };
 
-const GLfloat YAW = -90.0f;
-const GLfloat PITCH = 0.0f;
-const GLfloat SPEED = 3.0f;
-const GLfloat SENSITIVTY = 0.25f;
-const GLfloat ZOOM = 45.0f;
+const GLfloat SPEED = 1.5f;
+const GLfloat RADIUS = 5.0;
 
 class Camera {
 public:
 	vec3 Position;
 	vec3 Front;
 	vec3 Up;
-	vec3 Right;
-	vec3 WorldUp;
-
-	GLfloat Yaw;
-	GLfloat Pitch;
-
-	GLfloat MovementSpeed;
 
 	Camera();
 	mat4 getViewMatrix();
-	void processKeyboard(CameraMovement, GLfloat);
+	void move(bool*, GLfloat);
+	void processKeyboardInput(CameraMovement, GLfloat);
 
 private:
-	void updateCameraVectors();
+	void rotateLeft(GLfloat);
+	void rotateRight(GLfloat);
+	GLfloat absolute(GLfloat);
 };
 
 #endif CAMERA_H
