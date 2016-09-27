@@ -22,7 +22,7 @@ void Camera::move(bool* keys, GLfloat deltaTime) {
 }
 
 void Camera::processKeyboardInput(CameraMovement direction, GLfloat deltaTime) {
-	GLfloat velocity = SPEED * deltaTime;
+	GLfloat velocity = CAMERASPEED * deltaTime;
 
 	if (direction == FORWARD && Position.y > 0.7)
 		Position -= (Position * velocity);

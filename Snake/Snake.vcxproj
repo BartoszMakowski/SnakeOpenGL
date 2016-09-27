@@ -88,12 +88,14 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Space.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Snake.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Shader.h" />

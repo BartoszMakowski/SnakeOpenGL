@@ -29,8 +29,6 @@ int main()
 
 	render->gameLoop();
 
-	render->releaseResources();
-
 	delete render;
 	return 0;
 }

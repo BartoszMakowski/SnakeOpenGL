@@ -12,6 +12,7 @@
 #include "Shader.h"
 #include "Ground.h"
 #include "Space.h"
+#include "Snake.h"
 #include "Camera.h"
 #include "Cube.h"
 
@@ -19,9 +20,8 @@
 #include <cmath>
 #include <vector>
 
-GLfloat vertices[];
-
 void key_callback(GLFWwindow*, int, int, int, int);
+bool moveAllowed(int);
 
 using std::cout;
 using std::endl;
@@ -42,33 +42,20 @@ public:
 	bool initGLEW();
 	void setViewport();
 	void setDepthBuffer();
-	void manageShaders();
 	void setMatrixes();
 	void createObjects();
-	void releaseResources();
 
 	void gameLoop();
 
 private:
 	void clearBuffer();
-	void generateBuffer();
-	void interpretVertexData();
 	void updateTime();
-
-	void drawTriangle();
-
-	void changeColor();
-	void loadTriangleTexture();
+	bool nextPeriod(GLfloat);
+	GLfloat countPeriod(GLfloat);
 
 	void createCubes();
 
 	GLFWwindow* window;
-	// shaders
-	GLuint VAO;
-	GLuint VBO;
-	GLuint EBO;
-
-	Shader groundShader;
 	// compile error management
 	GLint success;
 	GLchar infoLog[512];
@@ -79,28 +66,20 @@ private:
 	// view port variables
 	int width;
 	int height;
-	// changing colors
-	GLfloat timeValue;
-	GLfloat redValue;
-	GLint vertexColorLocation;
-	// texture
-	GLuint triangleTexture;
-	unsigned char* image;
 	// transformation
-	GLint transformLoc;
-	GLint viewLoc;
-	GLint projectionLoc;
 	mat4 view;
 	mat4 projection;
 	// objects
 	Ground* ground;
 	Space* space;
+	Snake* snake;
 	Cube* cubes;
 	// camera
 	Camera* camera;
 	// time
 	GLfloat deltaTime;
 	GLfloat lastFrame;
+	bool moveSnake;
 };
 
 #endif RENDERMANAGER_H

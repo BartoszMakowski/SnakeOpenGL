@@ -25,7 +25,7 @@ enum CameraMovement {
 	RIGHT
 };
 
-const GLfloat SPEED = 1.5f;
+const GLfloat CAMERASPEED = 1.5f;
 const GLfloat RADIUS = 5.0;
 
 class Camera {
@@ -37,9 +37,9 @@ public:
 	Camera();
 	mat4 getViewMatrix();
 	void move(bool*, GLfloat);
-	void processKeyboardInput(CameraMovement, GLfloat);
 
 private:
+	void processKeyboardInput(CameraMovement, GLfloat);
 	void rotateLeft(GLfloat);
 	void rotateRight(GLfloat);
 	GLfloat absolute(GLfloat);

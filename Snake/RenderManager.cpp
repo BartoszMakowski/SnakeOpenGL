@@ -2,54 +2,53 @@
 
 static const char* GLFWINDOWWERROR = "Failed to create GLFW window\n";
 static const char* GLEWINITERROR = "Failed to initialize GLEW\n";
-static const char* TRIANGLEVERTEXSHADERPATH = ".\\Shaders\\triangle.vs";
-static const char* TRIANGLEFRAGMENTSHADERPATH = ".\\Shaders\\triangle.frag";
-static const char* IMAGEPATH = ".\\textures\\ground.png";
-const char* RenderManager::TITLE = "Wonsz";
+const char* RenderManager::TITLE = "Snek";
 
 bool keys[1024];
-
-GLfloat Mainvertices[] = { // with texture
-	0.5f, 0.5f, 0.0f,
-	1.0f, 1.0f,  // Top Right
-
-	0.5f, -0.5f, 0.0f,
-	1.0f, 0.0f,  // Bottom Right
-
-	-0.5f, -0.5f, 0.0f,
-	0.0f, 0.0f,  // Bottom Left
-
-	-0.5f, 0.5f, 0.0f,
-	0.0f, 1.0f   // Top Left 
-};
-
-GLuint Mainindices[] = {  // Note that we start from 0!
-	0, 1, 3,   // First Triangle
-	1, 2, 3    // Second Triangle
-};
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key >= 0 && key < 1024)
+	if (key == GLFW_KEY_KP_8 || key == GLFW_KEY_KP_6 || key == GLFW_KEY_KP_5 || key == GLFW_KEY_KP_4)
 	{
 		if (action == GLFW_PRESS)
 			keys[key] = true;
 		else if (action == GLFW_RELEASE)
 			keys[key] = false;
 	}
+	if (key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D) {
+		if (action == GLFW_PRESS && moveAllowed(key)) {
+			keys[GLFW_KEY_W] = false;
+			keys[GLFW_KEY_S] = false;
+			keys[GLFW_KEY_A] = false;
+			keys[GLFW_KEY_D] = false;
+			keys[key] = true;
+		}
+	}
+}
+
+bool moveAllowed(int key) {
+	if (key == GLFW_KEY_W && keys[GLFW_KEY_S]) return false;
+	if (key == GLFW_KEY_S && keys[GLFW_KEY_W]) return false;
+	if (key == GLFW_KEY_A && keys[GLFW_KEY_D]) return false;
+	if (key == GLFW_KEY_D && keys[GLFW_KEY_A]) return false;
+	if (key == GLFW_KEY_S && !keys[GLFW_KEY_W] && !keys[GLFW_KEY_S] && !keys[GLFW_KEY_A] && !keys[GLFW_KEY_D]) return false;
+	return true;
 }
 
 RenderManager::RenderManager() {
 	deltaTime = 0.0f;
 	lastFrame = 0.0f;
+	moveSnake = false;
 }
 
 RenderManager::~RenderManager() {
 	delete ground;
 	delete space;
+	delete snake;
 	delete cubes;
 	delete camera;
+	glfwTerminate();
 }
 
 void RenderManager::initGLFW() {
@@ -93,12 +92,6 @@ void RenderManager::setDepthBuffer() {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void RenderManager::manageShaders() {
-	//groundShader = Shader(TRIANGLEVERTEXSHADERPATH, TRIANGLEFRAGMENTSHADERPATH);
-	//generateBuffer();
-	//interpretVertexData();
-}
-
 void RenderManager::setMatrixes() {
 	camera = new Camera();
 	projection = glm::perspective(45.0f, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
@@ -107,13 +100,8 @@ void RenderManager::setMatrixes() {
 void RenderManager::createObjects() {
 	space = new Space();
 	ground = new Ground();
+	snake = new Snake();
 	cubes = new Cube();
-}
-
-void RenderManager::releaseResources() {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glfwTerminate();
 }
 
 void RenderManager::gameLoop() {
@@ -122,10 +110,13 @@ void RenderManager::gameLoop() {
 		glfwPollEvents();
 		camera->move(keys, deltaTime);
 		view = camera->getViewMatrix();
+		if (moveSnake)
+			snake->move(keys);
 		clearBuffer();
 		space->draw(&view, &projection);
 		ground->draw(&view, &projection);
 		cubes->draw(&view, &projection);
+		snake->draw(&view, &projection);
 		glfwSwapBuffers(window);
 	}
 }
@@ -135,75 +126,33 @@ void RenderManager::clearBuffer() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void RenderManager::generateBuffer() {
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Mainvertices), Mainvertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Mainindices), Mainindices, GL_STATIC_DRAW);
-}
-
-void RenderManager::interpretVertexData() {
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	loadTriangleTexture();
-	// Wireframe mode
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-}
 
 void RenderManager::updateTime() {
 	GLfloat currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
+	moveSnake = nextPeriod(currentFrame);
 	lastFrame = currentFrame;
 }
 
-void RenderManager::drawTriangle() {
-	glBindTexture(GL_TEXTURE_2D, triangleTexture);
-	groundShader.Use();
-	changeColor();
-	mat4 transform;
-	//transform = translate(transform, vec3(0.5f, -0.5f, 0.0f));
-	//transform = rotate(transform, radians(95.0f), vec3(1.0f, 0.0f, 0.0f));
-	//transform = rotate(transform, (GLfloat)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
-	//transform = scale(transform, vec3(2.0f, 2.0f, 2.0f));
-	transformLoc = glGetUniformLocation(groundShader.Program, "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-	glBindVertexArray(VAO);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+bool RenderManager::nextPeriod(GLfloat currentFrame) {
+	GLfloat previousPeriod, currentPeriod;
+
+	previousPeriod = countPeriod(lastFrame);
+	currentPeriod = countPeriod(currentFrame);
+	return previousPeriod != currentPeriod;
 }
 
-void RenderManager::changeColor() {
-	timeValue = glfwGetTime();
-	redValue = (sin(timeValue) / 2) + 0.5;
-	vertexColorLocation = glGetUniformLocation(groundShader.Program, "ourColor");
-	glUniform4f(vertexColorLocation, redValue, 0.0f, 0.2f, 1.0f);
+GLfloat RenderManager::countPeriod(GLfloat frameTime) {
+	GLfloat period;
+
+	// rounds to 0.5
+	//period = floor(frameTime);
+	//if (round(period) != period)
+	//	period += 0.5;
+
+	// rounds to 0.1
+	period = floor((frameTime * 10) + 0.5) / 10;
+
+	return period;
 }
 
-void RenderManager::loadTriangleTexture() {
-	int locWidth, locHeight;
-
-	glGenTextures(1, &triangleTexture);
-	glBindTexture(GL_TEXTURE_2D, triangleTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	image = SOIL_load_image(IMAGEPATH, &locWidth, &locHeight, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, locWidth, locHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}

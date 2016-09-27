@@ -24,12 +24,12 @@ Space::Space() {
 	generateBuffer();
 	interpretVertexData();
 	loadTexture();
-	model = translate(model, vec3(0.0f, 0.0f, 5.0f));
-	model = rotate(model, glm::radians(45.0f), vec3(1.0f, 0.0f, 0.0f));
-	model = scale(model, vec3(10.0f, 10.0f, 0.0f));
+	transformModelMatrixes();
 }
 
 Space::~Space() {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 	delete shader;
 }
 
@@ -90,6 +90,34 @@ void Space::loadTexture() {
 }
 
 void Space::drawSpaces(mat4* view, mat4* projection) {
-	transformCoordinates(view, projection);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	for (int i = 0; i < (int)modelMatrixes.size(); i++) {
+		model = modelMatrixes[i];;
+		transformCoordinates(view, projection);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
+}
+
+void Space::transformModelMatrixes() {
+	mat4 tmpModel;
+	int numberOfSpacePlanes = 4;
+
+	for (int i = 0; i < numberOfSpacePlanes; i++)
+		modelMatrixes.push_back(tmpModel);
+
+	modelMatrixes[0] = translate(modelMatrixes[0], vec3(0.0f, 0.0f, 5.0f));
+	modelMatrixes[0] = rotate(modelMatrixes[0], glm::radians(45.0f), vec3(1.0f, 0.0f, 0.0f));
+
+	modelMatrixes[1] = translate(modelMatrixes[1], vec3(0.0f, 0.0f, -5.0f));
+	modelMatrixes[1] = rotate(modelMatrixes[1], glm::radians(45.0f), vec3(-1.0f, 0.0f, 0.0f));
+
+	modelMatrixes[2] = translate(modelMatrixes[2], vec3(7.0f, 0.0f, 0.0f));
+	modelMatrixes[2] = rotate(modelMatrixes[2], glm::radians(90.0f), vec3(0.0f, 1.0f, -0.5f));
+
+	modelMatrixes[3] = translate(modelMatrixes[3], vec3(-7.0f, 0.0f, 0.0f));
+	modelMatrixes[3] = rotate(modelMatrixes[3], glm::radians(90.0f), vec3(0.0f, -1.0f, 0.5f));
+
+	for (int i = 0; i < numberOfSpacePlanes; i++)
+		modelMatrixes[i] = scale(modelMatrixes[i], vec3(10.0f, 10.0f, 0.0f));
+
+
 }

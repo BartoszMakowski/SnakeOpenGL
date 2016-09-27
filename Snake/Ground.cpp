@@ -29,6 +29,8 @@ Ground::Ground() {
 }
 
 Ground::~Ground() {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 	delete shader;
 }
 
