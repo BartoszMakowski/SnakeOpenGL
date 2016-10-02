@@ -151,13 +151,16 @@ void Cube::transformCoordinates(mat4* view, mat4* projection) {
 	modelLoc = glGetUniformLocation(shader->Program, "model");
 	viewLoc = glGetUniformLocation(shader->Program, "view");
 	projectionLoc = glGetUniformLocation(shader->Program, "projection");
+	GLint lightColorLoc = glGetUniformLocation(shader->Program, "lightColor");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(*projection));
+	glUniform3f(lightColorLoc, 1.0f, 0.5f, 1.0f); // Also set light's color (white)
 }
 
 void Cube::generateBuffer() {
 	glGenVertexArrays(1, &VAO);
+	glGenVertexArrays(1, &lightVAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
 	glBindVertexArray(VAO);

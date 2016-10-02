@@ -12,6 +12,8 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::ifstream;
+#include "glm/glm.hpp"
+
 using std::stringstream;
 
 class Shader {
@@ -21,6 +23,7 @@ public:
 	Shader();
 	Shader(const GLchar*, const GLchar*);
 	void Use();
+
 
 private:
 	GLuint vertex;

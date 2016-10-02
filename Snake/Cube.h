@@ -36,6 +36,7 @@ private:
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;
+	GLuint lightVAO;
 	// texture
 	GLuint texture;
 	unsigned char* image;
