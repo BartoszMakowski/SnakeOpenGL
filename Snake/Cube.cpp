@@ -75,6 +75,56 @@ GLfloat cubeVertices[] = { // with texture
 	0.0f, 1.0f
 };
 
+GLfloat cubeNormals[] = {
+	0.0f, 0.0f, 1.0f,	// Front, Top, Right half
+	0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f,
+	
+	0.0f, 0.0f, 1.0f,    // Front, Bottom, Left half
+	0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f,
+
+	1.0f, 0.0f,  0.0f,	// Right, Top, Right half
+	1.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+
+	1.0f, 0.0f, 0.0f,	// Right, Bottom, Left half
+	1.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+
+	0.0f, 0.0f, -1.0f,	// Back, Top, Right half
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+
+	0.0f, 0.0f, -1.0f,	// Back, Bottom, Left half
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+
+	-1.0f, 0.0f, 0.0f,	// Left, Top, Right half
+	-1.0f, 0.0f, 0.0f,
+	-1.0f, 0.0f, 0.0f,
+
+	-1.0f, 0.0f, 0.0f,	// Left, Bottom, Left half
+	-1.0f, 0.0f, 0.0f,
+	-1.0f, 0.0f, 0.0f,
+
+	0.0f, 1.0f, 0.0f,	// Top, Back, Right half
+	0.0f, 1.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+
+	0.0f, 1.0f, 0.0f,	// Top, Front, Left half
+	0.0f, 1.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+
+	0.0f, -1.0f, 0.0f,	// Bottom, Back, Right half
+	0.0f, -1.0f, 0.0f,
+	0.0f, -1.0f, 0.0f,
+
+	0.0f, -1.0f, 0.0f,	// Bottom, Front, Left half
+	0.0f, -1.0f, 0.0f,
+	0.0f, -1.0f, 0.0f
+};
+
 GLuint cubeIndices[] {
 	0, 1, 3,	// Front, Top, Right half
 	2, 3, 1,    // Front, Bottom, Left half
@@ -152,29 +202,39 @@ void Cube::transformCoordinates(mat4* view, mat4* projection) {
 	viewLoc = glGetUniformLocation(shader->Program, "view");
 	projectionLoc = glGetUniformLocation(shader->Program, "projection");
 	GLint lightColorLoc = glGetUniformLocation(shader->Program, "lightColor");
+	GLint lightPosLoc = glGetUniformLocation(shader->Program, "lightPos");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(*projection));
-	glUniform3f(lightColorLoc, 1.0f, 0.5f, 1.0f); // Also set light's color (white)
+	glUniform3f(lightColorLoc, 1.0f, 0.5f, 1.0f);
+	glUniform3f(lightPosLoc, 1.2f, 1.0f, 2.0f);
 }
 
 void Cube::generateBuffer() {
 	glGenVertexArrays(1, &VAO);
 	glGenVertexArrays(1, &lightVAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &NORMALS);
 	glGenBuffers(1, &EBO);
 	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, NORMALS);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeNormals), cubeNormals, GL_STATIC_DRAW);
+
 }
 
 void Cube::interpretVertexData() {
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glBindBuffer(GL_ARRAY_BUFFER, NORMALS);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glBindVertexArray(0);
 }
 

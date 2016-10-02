@@ -15,6 +15,7 @@ static const char* CUBEFRAGMENTSHADERPATH = ".\\Shaders\\cube.frag";
 static const char* CUBEIMAGEPATH = ".\\textures\\box.png";
 
 GLfloat cubeVertices[];
+GLfloat cubeNormals[];
 GLuint cubeIndices[];
 
 using glm::mat4;
@@ -37,6 +38,7 @@ private:
 	GLuint VBO;
 	GLuint EBO;
 	GLuint lightVAO;
+	GLuint NORMALS;
 	// texture
 	GLuint texture;
 	unsigned char* image;
