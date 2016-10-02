@@ -76,13 +76,13 @@ GLfloat cubeVertices[] = { // with texture
 };
 
 GLfloat cubeNormals[] = {
-	0.0f, 0.0f, 1.0f,	// Front, Top, Right half
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, -1.0f,	// Front, Top, Right half
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
 	
-	0.0f, 0.0f, 1.0f,    // Front, Bottom, Left half
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, -1.0f,    // Front, Bottom, Left half
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
 
 	1.0f, 0.0f,  0.0f,	// Right, Top, Right half
 	1.0f, 0.0f, 0.0f,
@@ -92,13 +92,13 @@ GLfloat cubeNormals[] = {
 	1.0f, 0.0f, 0.0f,
 	1.0f, 0.0f, 0.0f,
 
-	0.0f, 0.0f, -1.0f,	// Back, Top, Right half
-	0.0f, 0.0f, -1.0f,
-	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, 1.0f,	// Back, Top, Right half
+	0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f,
 
-	0.0f, 0.0f, -1.0f,	// Back, Bottom, Left half
-	0.0f, 0.0f, -1.0f,
-	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, 1.0f,	// Back, Bottom, Left half
+	0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f,
 
 	-1.0f, 0.0f, 0.0f,	// Left, Top, Right half
 	-1.0f, 0.0f, 0.0f,
@@ -203,11 +203,13 @@ void Cube::transformCoordinates(mat4* view, mat4* projection) {
 	projectionLoc = glGetUniformLocation(shader->Program, "projection");
 	GLint lightColorLoc = glGetUniformLocation(shader->Program, "lightColor");
 	GLint lightPosLoc = glGetUniformLocation(shader->Program, "lightPos");
+	GLint viewPosLoc = glGetUniformLocation(shader->Program, "viewPos");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(*projection));
 	glUniform3f(lightColorLoc, 1.0f, 0.5f, 1.0f);
-	glUniform3f(lightPosLoc, 1.2f, 1.0f, 2.0f);
+	glUniform3f(lightPosLoc, -6.0f, 10.0f, 2.0f);
+	glUniform3f(viewPosLoc, 0.0f, 10.0f, 4.0f);
 }
 
 void Cube::generateBuffer() {
