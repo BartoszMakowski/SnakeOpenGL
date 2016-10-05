@@ -102,6 +102,8 @@ void RenderManager::createObjects() {
 	ground = new Ground();
 	snake = new Snake();
 	cubes = new Cube();
+	rabbit = new Model();
+	//rabbit->loadOBJ(".\\OBJ\\Rabbit.obj");
 }
 
 void RenderManager::gameLoop() {
@@ -114,9 +116,10 @@ void RenderManager::gameLoop() {
 			snake->move(keys);
 		clearBuffer();
 		space->draw(&view, &projection);
-		ground->draw(&view, &projection);
-		cubes->draw(&view, &projection);
+		//ground->draw(&view, &projection);
+		//cubes->draw(&view, &projection);
 		snake->draw(&view, &projection);
+		rabbit->draw(&view, &projection);
 		glfwSwapBuffers(window);
 	}
 }

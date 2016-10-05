@@ -2,6 +2,8 @@
 #define RENDER_MANAGER_H
 #define GLEW_STATIC
 
+static const char* OBJPATH = ".\\OBJ\\";
+
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 #include "SOIL\SOIL.h"
@@ -15,6 +17,7 @@
 #include "Snake.h"
 #include "Camera.h"
 #include "Cube.h"
+#include "Model.h"
 
 #include <iostream>
 #include <cmath>
@@ -74,6 +77,7 @@ private:
 	Space* space;
 	Snake* snake;
 	Cube* cubes;
+	Model* rabbit;
 	// camera
 	Camera* camera;
 	// time
