@@ -4,11 +4,15 @@
 Model::Model()
 {
 	shader = new Shader(VERETXSHADERPATH, FRAGMENTSHADERPATH);
-	loadOBJ(".\\OBJ\\Rabbit.obj");
+	cout << "LOADING...";
+	loadOBJ(".\\OBJ\\cube.obj");
+	//load_obj();
+	cout << "LOADED";
 	generateBuffer();
 	interpretVertexData();
 	//loadTexture();
-	scaleMultiplier = 0.85f;
+	scaleMultiplier = 0.15f;
+	//baseModel = rotate(baseModel, glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
 	baseModel = translate(baseModel, vec3(0.0f, scaleMultiplier, 0.0f));
 	baseModel = scale(baseModel, vec3(scaleMultiplier, scaleMultiplier, scaleMultiplier));
 }
@@ -21,16 +25,20 @@ Model::~Model()
 //na podstawie: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-7-model-loading/
 bool Model::loadOBJ(const char * path)
 {
-	vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	vector<vec4> temp_vertices;
-	vector<vec2> temp_uvs;
-	vector<vec4> temp_normals;
+	printf("Loading %s...\n", path);
+
+	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+	std::vector<glm::vec4> temp_vertices;
+	std::vector<glm::vec2> temp_uvs;
+	std::vector<glm::vec4> temp_normals;
+
+
 	FILE * file = fopen(path, "r");
-	if (file == NULL){
-		printf(path);
-		printf("Impossible to open the file !\n");
+	if (file == NULL) {
+		printf("Can't open the file...\n");
 		return false;
 	}
+
 	while (1) {
 
 		char lineHeader[128];
@@ -40,30 +48,30 @@ bool Model::loadOBJ(const char * path)
 			break;
 
 		if (strcmp(lineHeader, "v") == 0) {
-			vec4 vertex;
+			glm::vec4 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			vertex.w = 1.0f;
 			temp_vertices.push_back(vertex);
 		}
 		else if (strcmp(lineHeader, "vt") == 0) {
-			vec2 uv;
+			glm::vec2 uv;
 			fscanf(file, "%f %f\n", &uv.x, &uv.y);
-			uv.y = -uv.y;
+			//uv.y = -uv.y; // Invert V coordinate since we will only use DDS texture, which are inverted. Remove if you want to use TGA or BMP loaders.
 			temp_uvs.push_back(uv);
 		}
 		else if (strcmp(lineHeader, "vn") == 0) {
-			vec4 normal;
+			glm::vec4 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
 			normal.w = 0.0f;
 			temp_normals.push_back(normal);
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
-			string vertex1, vertex2, vertex3;
+			std::string vertex1, vertex2, vertex3;
 			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 			if (matches != 9) {
 				printf("File can't be read by our simple parser :-( Try exporting with other options\n");
-				return false;
+				//  return false;
 			}
 			vertexIndices.push_back(vertexIndex[0]);
 			vertexIndices.push_back(vertexIndex[1]);
@@ -75,37 +83,36 @@ bool Model::loadOBJ(const char * path)
 			normalIndices.push_back(normalIndex[1]);
 			normalIndices.push_back(normalIndex[2]);
 		}
-		//else {
+		else {
 			// Probably a comment, eat up the rest of the line
 			//char stupidBuffer[1000];
 			//fgets(stupidBuffer, 1000, file);
-		//}
-		for (unsigned int i = 0; i<vertexIndices.size(); i++) {
-
-			// Get the indices of its attributes
-			unsigned int vertexIndex = vertexIndices[i];
-			unsigned int uvIndex = uvIndices[i];
-			unsigned int normalIndex = normalIndices[i];
-
-			// Get the attributes thanks to the index
-			vec4 vertex = temp_vertices[vertexIndex - 1];
-			vec2 uv = temp_uvs[uvIndex - 1];
-			vec4 normal = temp_normals[normalIndex - 1];
-			//cout << 3;
-			//cout << temp_vertices.size();
-
-			// Put the attributes in buffers
-		    vertices.push_back(vertex);
-			uvs.push_back(uv);
-			normals.push_back(normal);
 		}
 
 	}
-	//cout << vertices.size();
+
+	// For each vertex of each triangle
+	for (unsigned int i = 0; i<vertexIndices.size(); i++) {
+
+		// Get the indices of its attributes
+		unsigned int vertexIndex = vertexIndices[i];
+		unsigned int uvIndex = uvIndices[i];
+		unsigned int normalIndex = normalIndices[i];
+
+		// Get the attributes thanks to the index
+		glm::vec4 vertex = temp_vertices[vertexIndex - 1];
+		glm::vec2 uv = temp_uvs[uvIndex - 1];
+		glm::vec4 normal = temp_normals[normalIndex - 1];
+
+		// Put the attributes in buffers
+		vertices.push_back(vertex);
+		uvs.push_back(uv);
+		normals.push_back(normal);
+
+	}
 
 	return true;
-
-};
+}
 
 void Model::generateBuffer() {
 	glGenVertexArrays(1, &VAO);
@@ -119,13 +126,12 @@ void Model::generateBuffer() {
 void Model::interpretVertexData() {
 	glBindBuffer(GL_ARRAY_BUFFER, VERTEX);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, UV);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, NORMAL);
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glBindVertexArray(0);
 };
 
@@ -157,12 +163,33 @@ void Model::transformCoordinates(mat4* view, mat4* projection) {
 };
 
 void Model::draw(mat4* view, mat4* projection) {
-	//glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	shader->Use();
 	glBindVertexArray(VAO);
 	model = baseModel;
 	transformCoordinates(view, projection);
 	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	//cout << vertices.size();
+	//cout << "APPLE POS: " << 0 << "  " << 0 << endl;
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 	glBindVertexArray(0);
 };
+
+void Model::loadTexture() {
+	int locWidth, locHeight;
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	image = SOIL_load_image(IMAGEPATH, &locWidth, &locHeight, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, locWidth, locHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}

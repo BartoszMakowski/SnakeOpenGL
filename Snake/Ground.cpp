@@ -90,3 +90,10 @@ void Ground::loadTexture() {
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+vec2 Ground::randomPos(){
+	int x, y;
+	x = rand() % 10 - 5;
+	y = rand() % 10 - 5;
+	return vec2(x, y);
+}

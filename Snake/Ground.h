@@ -19,12 +19,14 @@ GLuint groundIndices[];
 
 using glm::mat4;
 using glm::vec3;
+using glm::vec2;
 
 class Ground {
 public:
 	Ground();
 	~Ground();
 	void draw(mat4*, mat4*);
+	vec2 randomPos();
 
 private:
 	// shaders

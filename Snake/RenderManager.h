@@ -17,7 +17,8 @@ static const char* OBJPATH = ".\\OBJ\\";
 #include "Snake.h"
 #include "Camera.h"
 #include "Cube.h"
-#include "Model.h"
+//#include "Model.h"
+#include "Apple.h"
 
 #include <iostream>
 #include <cmath>
@@ -77,7 +78,7 @@ private:
 	Space* space;
 	Snake* snake;
 	Cube* cubes;
-	Model* rabbit;
+	Apple* rabbit;
 	// camera
 	Camera* camera;
 	// time

@@ -96,6 +96,8 @@ Snake::Snake() {
 	interpretVertexData();
 	loadTexture();
 	initiateSnakeElements();
+	hit = false;
+	end = false;
 }
 
 Snake::~Snake() {
@@ -125,33 +127,44 @@ void Snake::move(bool* keys) {
 
 void Snake::processKeyboardInput(SnakeMovement direction) {
 	int head = 0;
-	moveTail();
+
+	hit ? addElement() : moveTail();
+	
+	vec3 diff = vec3(0.0f, 0.0f, 0.0f);
 
 	if (direction == W)
-		snakeElements[head] = translate(snakeElements[head], vec3(0.0f, 0.0f, ORIGINALSIDELENGTH));
+		diff = vec3(0.0f, 0.0f, ORIGINALSIDELENGTH);
 	if (direction == S)
-		snakeElements[head] = translate(snakeElements[head], vec3(0.0f, 0.0f, -ORIGINALSIDELENGTH));
+		diff = vec3(0.0f, 0.0f, -ORIGINALSIDELENGTH);
 	if (direction == A)
-		snakeElements[head] = translate(snakeElements[head], vec3(ORIGINALSIDELENGTH, 0.0f, 0.0f));
+		diff = vec3(ORIGINALSIDELENGTH, 0.0f, 0.0f);
 	if (direction == D)
-		snakeElements[head] = translate(snakeElements[head], vec3(-ORIGINALSIDELENGTH, 0.0f, 0.0f));
+		diff = vec3(-ORIGINALSIDELENGTH, 0.0f, 0.0f);
+	snakeElements[head] = translate(snakeElements[head], diff);
+	snakePos[0] += diff;
+	//cout << snakePos[0].x << " " << snakePos[0].z << endl;
+	checkMove();
 }
 
 void Snake::moveTail() {
-	for (int i = (int)snakeElements.size() - 1; i > 0; i--)
+	for (int i = (int)snakeElements.size() - 1; i > 0; i--){
 		snakeElements[i] = snakeElements[i - 1];
+		snakePos[i] = snakePos[i - 1];
+	}
 }
 
 void Snake::initiateSnakeElements() {
 	int numberOfStartElements = 3;
 	GLfloat scaleMultiplier = 0.1f;
 
+	headPos = vec3(0.0f, scaleMultiplier, -1.0f);
 	baseModel = translate(baseModel, vec3(0.0f, scaleMultiplier, -1.0f));
 	baseModel = scale(baseModel, vec3(scaleMultiplier, scaleMultiplier, scaleMultiplier));
 	
 	for (int i = 0; i < numberOfStartElements; i++) {
 		snakeElements.push_back(baseModel);
 		snakeElements[i] = translate(snakeElements[i], vec3(0.0f, 0.0f, -i * ORIGINALSIDELENGTH));
+		snakePos.push_back(vec3(0.0f, 0.0f, -i * ORIGINALSIDELENGTH));
 	}
 }
 
@@ -209,4 +222,52 @@ void Snake::loadTexture() {
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+int Snake::addElement(){
+	int newSize = (int)snakeElements.size() + 1;
+	snakeElements.resize(newSize);
+	snakePos.resize(newSize);
+	for (int i = newSize - 2; i > 0; i--){
+		snakeElements[i] = snakeElements[i - 1];
+		snakePos[i] = snakePos[i - 1];
+	}
+	snakeElements[newSize-1] = snakeElements[newSize - 2];
+	snakePos[newSize - 1] = snakePos[newSize - 2];
+	hit = false;
+	return newSize;
+}
+
+vec2 Snake::getHeadPos(){
+	return vec2(snakePos[0].x, snakePos[0].z);
+}
+
+void Snake::setHit(bool val){
+	hit = val;
+}
+
+bool Snake::getEnd(){
+	return end;
+}
+
+bool Snake::checkMove(){
+	cout << snakePos[0].x << " " << snakePos[0].z <<endl;
+	if ((snakePos[0].x > 32 || snakePos[0].x < -30)) { end = 1; return true; }
+	if ((snakePos[0].z > 35 || snakePos[0].z < -18)) { end = 1; return true; }
+	for (int i = 4; i < snakePos.size(); i++){
+		if (snakePos[0] == snakePos[i]){
+			end = 1;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Snake::validPos(vec2 pos){
+	for (int i = 0; i < snakeElements.size(); i++){
+		if (pos.x == snakePos[i].x || pos.y == snakePos[i].z){
+			return false;
+		}
+	}
+	return true;	
 }

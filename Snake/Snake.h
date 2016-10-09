@@ -32,6 +32,7 @@ GLuint snakeIndices[];
 using std::vector;
 using glm::mat4;
 using glm::vec3;
+using glm::vec2;
 using glm::scale;
 using glm::rotate;
 using glm::translate;
@@ -42,6 +43,10 @@ public:
 	~Snake();
 	void draw(mat4*, mat4*);
 	void move(bool*);
+	vec2 getHeadPos();
+	void setHit(bool val);
+	bool getEnd();
+	bool validPos(vec2);
 
 private:
 	// shaders
@@ -56,9 +61,13 @@ private:
 	vector <mat4> snakeElements;
 	mat4 baseModel;
 	mat4 model;
+	vec3 headPos;
+	vector <vec3> snakePos;
 	GLint modelLoc;
 	GLint viewLoc;
 	GLint projectionLoc;
+	bool hit;
+	bool end;
 
 	void processKeyboardInput(SnakeMovement);
 	void moveTail();
@@ -68,6 +77,8 @@ private:
 	void generateBuffer();
 	void interpretVertexData();
 	void loadTexture();
+	int addElement();
+	bool checkMove();
 };
 
 

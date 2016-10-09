@@ -82,8 +82,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Apple.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Ground.cpp" />
@@ -92,9 +94,11 @@
     <ClCompile Include="Space.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Apple.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="RenderManager.h" />

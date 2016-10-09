@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_DEPRECATE
 
 #include <vector>
 #include "GL\glew.h"
@@ -6,6 +7,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "SOIL\SOIL.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -16,7 +18,7 @@ using namespace std;
 
 static const char* VERETXSHADERPATH = ".\\Shaders\\cube.vs";
 static const char* FRAGMENTSHADERPATH = ".\\Shaders\\cube.frag";
-static const char* IMAGEPATH = ".\\textures\\box.png";
+static const char* IMAGEPATH = ".\\textures\\rabbit.png";
 
 //GLfloat vertices[];
 //GLfloat normals[];
@@ -28,8 +30,11 @@ class Model
 public:
 	Model();
 	~Model();
-	bool loadOBJ(const char*);
 	void draw(mat4*, mat4*);
+protected:
+	mat4 model;
+	mat4 baseModel;
+	GLfloat scaleMultiplier;
 
 private:
 	vector<vec4> vertices;
@@ -41,19 +46,19 @@ private:
 	GLuint UV;
 	GLuint NORMAL;
 
-	mat4 model;
-	mat4 baseModel;
+	GLuint texture;
+	unsigned char* image;
+
 	GLint modelLoc;
 	GLint viewLoc;
 	GLint projectionLoc;
-	GLfloat scaleMultiplier;
-
 	
 	void generateBuffer();
 	void interpretVertexData();
 	void transformCoordinates(mat4*, mat4*);
-
+	bool loadOBJ(const char*);
 	template<typename T>
 	void genBuf(GLuint*, vector<T>);
+	void loadTexture();
 };
 

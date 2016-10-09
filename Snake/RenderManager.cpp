@@ -102,12 +102,13 @@ void RenderManager::createObjects() {
 	ground = new Ground();
 	snake = new Snake();
 	cubes = new Cube();
-	rabbit = new Model();
+	rabbit = new Apple(vec2(0, 0));
 	//rabbit->loadOBJ(".\\OBJ\\Rabbit.obj");
 }
 
 void RenderManager::gameLoop() {
-	while (!glfwWindowShouldClose(window)) {
+	vec2 appleNewPos;
+	while (!glfwWindowShouldClose(window) && (!snake->getEnd())) {
 		updateTime();
 		glfwPollEvents();
 		camera->move(keys, deltaTime);
@@ -115,11 +116,23 @@ void RenderManager::gameLoop() {
 		if (moveSnake)
 			snake->move(keys);
 		clearBuffer();
+		//if (rabbit != NULL)
+		if ((abs(snake->getHeadPos().x - rabbit->getPos().x )  <=1) && 
+			(abs(snake->getHeadPos().y-6 - rabbit->getPos().y) <= 1)){
+			snake->setHit(true);
+			delete rabbit;
+
+			while (!snake->validPos( appleNewPos = ground->randomPos()));
+			
+			rabbit = new Apple(appleNewPos);
+		}
+		else {
+			rabbit->draw(&view, &projection);
+		}
 		space->draw(&view, &projection);
-		//ground->draw(&view, &projection);
-		//cubes->draw(&view, &projection);
+		ground->draw(&view, &projection);
+		cubes->draw(&view, &projection);
 		snake->draw(&view, &projection);
-		rabbit->draw(&view, &projection);
 		glfwSwapBuffers(window);
 	}
 }
@@ -154,7 +167,7 @@ GLfloat RenderManager::countPeriod(GLfloat frameTime) {
 	//	period += 0.5;
 
 	// rounds to 0.1
-	period = floor((frameTime * 10) + 0.5) / 10;
+	period = floor((frameTime * 10) + 0.5) / 100;
 
 	return period;
 }

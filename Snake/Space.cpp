@@ -119,5 +119,4 @@ void Space::transformModelMatrixes() {
 	for (int i = 0; i < numberOfSpacePlanes; i++)
 		modelMatrixes[i] = scale(modelMatrixes[i], vec3(10.0f, 10.0f, 0.0f));
 
-
 }
