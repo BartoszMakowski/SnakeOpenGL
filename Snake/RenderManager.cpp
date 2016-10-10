@@ -118,7 +118,7 @@ void RenderManager::gameLoop() {
 		clearBuffer();
 		//if (rabbit != NULL)
 		if ((abs(snake->getHeadPos().x - rabbit->getPos().x )  <=1) && 
-			(abs(snake->getHeadPos().y-6 - rabbit->getPos().y) <= 1)){
+			(abs(snake->getHeadPos().y - rabbit->getPos().y) <= 1)){
 			snake->setHit(true);
 			delete rabbit;
 

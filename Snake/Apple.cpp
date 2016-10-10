@@ -4,7 +4,7 @@
 Apple::Apple(vec2 pos)
 {
 	applePos = vec2(pos.x, pos.y);
-	baseModel = translate(baseModel, vec3(pos.x, 0.1, pos.y));
+	baseModel = translate(baseModel, vec3(pos.x, scaleMultiplier, pos.y));
 	cout << "\n ============== \nAPPLE POS: " << pos.x << "\t" << pos.y << endl;
 }
 

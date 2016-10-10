@@ -5,14 +5,14 @@ Model::Model()
 {
 	shader = new Shader(VERETXSHADERPATH, FRAGMENTSHADERPATH);
 	cout << "LOADING...";
-	loadOBJ(".\\OBJ\\cube.obj");
+	loadOBJ(".\\OBJ\\Cube.obj");
 	//load_obj();
 	cout << "LOADED";
 	generateBuffer();
 	interpretVertexData();
-	//loadTexture();
-	scaleMultiplier = 0.15f;
-	//baseModel = rotate(baseModel, glm::radians(90.0f), vec3(1.0f, 0.0f, 0.0f));
+	loadTexture();
+	scaleMultiplier = 0.45f;
+	//baseModel = rotate(baseModel, glm::radians(75.0f), vec3(0.0f, 1.0f, 0.0f));
 	baseModel = translate(baseModel, vec3(0.0f, scaleMultiplier, 0.0f));
 	baseModel = scale(baseModel, vec3(scaleMultiplier, scaleMultiplier, scaleMultiplier));
 }
@@ -28,9 +28,9 @@ bool Model::loadOBJ(const char * path)
 	printf("Loading %s...\n", path);
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	std::vector<glm::vec4> temp_vertices;
+	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
-	std::vector<glm::vec4> temp_normals;
+	std::vector<glm::vec3> temp_normals;
 
 
 	FILE * file = fopen(path, "r");
@@ -48,9 +48,8 @@ bool Model::loadOBJ(const char * path)
 			break;
 
 		if (strcmp(lineHeader, "v") == 0) {
-			glm::vec4 vertex;
+			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-			vertex.w = 1.0f;
 			temp_vertices.push_back(vertex);
 		}
 		else if (strcmp(lineHeader, "vt") == 0) {
@@ -60,9 +59,8 @@ bool Model::loadOBJ(const char * path)
 			temp_uvs.push_back(uv);
 		}
 		else if (strcmp(lineHeader, "vn") == 0) {
-			glm::vec4 normal;
+			glm::vec3 normal;
 			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-			normal.w = 0.0f;
 			temp_normals.push_back(normal);
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
@@ -100,9 +98,9 @@ bool Model::loadOBJ(const char * path)
 		unsigned int normalIndex = normalIndices[i];
 
 		// Get the attributes thanks to the index
-		glm::vec4 vertex = temp_vertices[vertexIndex - 1];
+		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
 		glm::vec2 uv = temp_uvs[uvIndex - 1];
-		glm::vec4 normal = temp_normals[normalIndex - 1];
+		glm::vec3 normal = temp_normals[normalIndex - 1];
 
 		// Put the attributes in buffers
 		vertices.push_back(vertex);
@@ -163,9 +161,7 @@ void Model::transformCoordinates(mat4* view, mat4* projection) {
 };
 
 void Model::draw(mat4* view, mat4* projection) {
-	glBindTexture(GL_TEXTURE_2D, texture);
-	shader->Use();
-	glBindVertexArray(VAO);
+	initiateDrawing();
 	model = baseModel;
 	transformCoordinates(view, projection);
 	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
@@ -192,4 +188,10 @@ void Model::loadTexture() {
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Model::initiateDrawing(){
+	glBindTexture(GL_TEXTURE_2D, texture);
+	shader->Use();
+	glBindVertexArray(VAO);	
 }

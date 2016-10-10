@@ -35,16 +35,19 @@ protected:
 	mat4 model;
 	mat4 baseModel;
 	GLfloat scaleMultiplier;
+	void initiateDrawing();
+	void transformCoordinates(mat4*, mat4*);
 
 private:
-	vector<vec4> vertices;
-	vector<vec4> normals;
+	vector<vec3> vertices;
+	vector<vec3> normals;
 	vector<vec2> uvs;
-	Shader* shader;
+	
 	GLuint VAO;
 	GLuint VERTEX;
 	GLuint UV;
 	GLuint NORMAL;
+	Shader* shader;
 
 	GLuint texture;
 	unsigned char* image;
@@ -55,7 +58,6 @@ private:
 	
 	void generateBuffer();
 	void interpretVertexData();
-	void transformCoordinates(mat4*, mat4*);
 	bool loadOBJ(const char*);
 	template<typename T>
 	void genBuf(GLuint*, vector<T>);
