@@ -19,6 +19,7 @@ static const char* OBJPATH = ".\\OBJ\\";
 #include "Cube.h"
 //#include "Model.h"
 #include "Apple.h"
+#include "Animal.h"
 
 #include <iostream>
 #include <cmath>
@@ -74,6 +75,9 @@ private:
 	mat4 view;
 	mat4 projection;
 	// objects
+	Animal* bison1;
+	Animal* cat1;
+	Animal* cat2;
 	Ground* ground;
 	Space* space;
 	Snake* snake;

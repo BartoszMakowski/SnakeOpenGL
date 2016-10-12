@@ -1,19 +1,20 @@
 #include "Model.h"
 
+Model::Model(){
 
-Model::Model()
+}
+
+Model::Model(char* model)
 {
 	shader = new Shader(VERETXSHADERPATH, FRAGMENTSHADERPATH);
 	cout << "LOADING...";
-	loadOBJ(".\\OBJ\\Cube.obj");
+	loadOBJ(model);
 	//load_obj();
 	cout << "LOADED";
 	generateBuffer();
 	interpretVertexData();
 	loadTexture();
-	scaleMultiplier = 0.45f;
-	//baseModel = rotate(baseModel, glm::radians(75.0f), vec3(0.0f, 1.0f, 0.0f));
-	baseModel = translate(baseModel, vec3(0.0f, scaleMultiplier, 0.0f));
+	scaleMultiplier = 0.25f;
 	baseModel = scale(baseModel, vec3(scaleMultiplier, scaleMultiplier, scaleMultiplier));
 }
 
@@ -153,10 +154,10 @@ void Model::transformCoordinates(mat4* view, mat4* projection) {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(*projection));
-	glUniform3f(light1ColorLoc, 1.0f, 0.0f, 0.0f);
+	glUniform3f(light1ColorLoc, 0.2f, 0.2f, 0.2f);
 	glUniform3f(light1PosLoc, -100.0f, 16.0f, 10.0f);
-	glUniform3f(light2ColorLoc, 0.0f, 0.0f, 1.0f);
-	glUniform3f(light2PosLoc, 20.0f, 70.0f, 5.0f);
+	glUniform3f(light2ColorLoc, 1.0f, 1.0f, 1.0f);
+	glUniform3f(light2PosLoc, 40.0f, 70.0f, 5.0f);
 	glUniform3f(viewPosLoc, 0.0f, 10.0f, 0.0f);
 };
 
@@ -164,9 +165,6 @@ void Model::draw(mat4* view, mat4* projection) {
 	initiateDrawing();
 	model = baseModel;
 	transformCoordinates(view, projection);
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-	//cout << vertices.size();
-	//cout << "APPLE POS: " << 0 << "  " << 0 << endl;
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 	glBindVertexArray(0);
 };

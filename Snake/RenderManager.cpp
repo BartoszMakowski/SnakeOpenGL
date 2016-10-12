@@ -102,8 +102,10 @@ void RenderManager::createObjects() {
 	ground = new Ground();
 	snake = new Snake();
 	cubes = new Cube();
-	rabbit = new Apple(vec2(0, 0));
-	//rabbit->loadOBJ(".\\OBJ\\Rabbit.obj");
+	rabbit = new Apple(vec2(0, 10));
+	bison1 = new Animal(".\\OBJ\\bison.obj", vec3(17.0f, 1.5f, -4.0f), 3.0f);
+	cat1 = new Animal(".\\OBJ\\cat.obj", vec3(-17.0f, 1.5f, -4.0f), 3.0f);
+	cat2 = new Animal(".\\OBJ\\cat.obj", vec3(-1.0f, 1.5f, 18.0f), 5.0f);
 }
 
 void RenderManager::gameLoop() {
@@ -117,8 +119,8 @@ void RenderManager::gameLoop() {
 			snake->move(keys);
 		clearBuffer();
 		//if (rabbit != NULL)
-		if ((abs(snake->getHeadPos().x - rabbit->getPos().x )  <=1) && 
-			(abs(snake->getHeadPos().y - rabbit->getPos().y) <= 1)){
+		if ((abs(snake->getHeadPos().x - rabbit->getPos().x*3.0)  <=5) && 
+ 			(abs(snake->getHeadPos().y - rabbit->getPos().y*2.7) <= 5)){
 			snake->setHit(true);
 			delete rabbit;
 
@@ -133,6 +135,9 @@ void RenderManager::gameLoop() {
 		ground->draw(&view, &projection);
 		cubes->draw(&view, &projection);
 		snake->draw(&view, &projection);
+		bison1->draw(&view, &projection);
+		cat1->draw(&view, &projection);
+		cat2->draw(&view, &projection);
 		glfwSwapBuffers(window);
 	}
 }

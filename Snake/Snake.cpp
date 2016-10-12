@@ -1,11 +1,14 @@
 #include "Snake.h"
 
 
-Snake::Snake() {
+Snake::Snake() : Model((char*)SNAKEOBJPATH) {
+	scaleMultiplier = 3.8;
+	baseModel = scale(baseModel, vec3(1.0, 1.0, 1.0)*scaleMultiplier);
+	baseModel = translate(baseModel, vec3(0.0f, 0.0f, 0.0f));
 	initiateSnakeElements();
 	hit = false;
 	end = false;
-	scaleMultiplier = 0.4;
+	
 }
 
 Snake::~Snake() {
@@ -67,7 +70,7 @@ void Snake::initiateSnakeElements() {
 	for (int i = 0; i < numberOfStartElements; i++) {
 		snakeElements.push_back(baseModel);
 		snakeElements[i] = translate(snakeElements[i], vec3(0.0f, 0.0f, -i * ORIGINALSIDELENGTH));
-		snakePos.push_back(vec3(0.0f, 0.0f, -i * ORIGINALSIDELENGTH));
+		snakePos.push_back(vec3(0.0f, 0.0f, -10 -i * ORIGINALSIDELENGTH));
 	}
 }
 
@@ -75,7 +78,7 @@ void Snake::drawSnakeElements(mat4* view, mat4* projection) {
 	for (int i = 0; i < (int)snakeElements.size(); i++) {
 		model = snakeElements[i];
 		transformCoordinates(view, projection);
-		glDrawArrays(GL_TRIANGLES, 0, 5000);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 }
 
@@ -108,8 +111,8 @@ bool Snake::getEnd(){
 
 bool Snake::checkMove(){
 	cout << snakePos[0].x << " " << snakePos[0].z <<endl;
-	if ((snakePos[0].x > 32 || snakePos[0].x < -30)) { end = 1; return true; }
-	if ((snakePos[0].z > 35 || snakePos[0].z < -18)) { end = 1; return true; }
+	if ((snakePos[0].x > /*34*/35 || snakePos[0].x < /*-32*/-35)) { end = 1; return true; }
+	if ((snakePos[0].z > /*36*/27 || snakePos[0].z < /*-16*/-27)) { end = 1; return true; }
 	for (int i = 4; i < snakePos.size(); i++){
 		if (snakePos[0] == snakePos[i]){
 			end = 1;

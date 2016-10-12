@@ -16,6 +16,7 @@
 static const char* SNAKEVERTEXSHADERPATH = ".\\Shaders\\snake.vs";
 static const char* SNAKEFRAGMENTSHADERPATH = ".\\Shaders\\snake.frag";
 static const char* SNAKEIMAGEPATH = ".\\textures\\snake.png";
+static const char* SNAKEOBJPATH = ".\\OBJ\\Cube.obj";
 
 enum SnakeMovement {
 	W,

@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animal.cpp" />
     <ClCompile Include="Apple.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
@@ -92,8 +93,10 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Space.cpp" />
+    <ClCompile Include="Wolf.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animal.h" />
     <ClInclude Include="Apple.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Ground.h" />
@@ -103,6 +106,7 @@
     <ClInclude Include="Space.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Wolf.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\cube.frag" />

@@ -18,7 +18,7 @@ using namespace std;
 
 static const char* VERETXSHADERPATH = ".\\Shaders\\cube.vs";
 static const char* FRAGMENTSHADERPATH = ".\\Shaders\\cube.frag";
-static const char* IMAGEPATH = ".\\textures\\rabbit.png";
+static const char* IMAGEPATH = ".\\textures\\tmp.png";
 
 //GLfloat vertices[];
 //GLfloat normals[];
@@ -29,6 +29,7 @@ class Model
 {
 public:
 	Model();
+	Model(char*);
 	~Model();
 	void draw(mat4*, mat4*);
 protected:

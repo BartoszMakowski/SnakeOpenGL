@@ -93,7 +93,7 @@ void Ground::loadTexture() {
 
 vec2 Ground::randomPos(){
 	int x, y;
-	x = rand() % 10 - 5;
-	y = rand() % 10 - 5;
+	x = rand() % 20 - 10;
+	y = rand() % 18 - 9;
 	return vec2(x, y);
 }

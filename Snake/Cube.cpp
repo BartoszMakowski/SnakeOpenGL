@@ -209,10 +209,10 @@ void Cube::transformCoordinates(mat4* view, mat4* projection) {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(*view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(*projection));
-	glUniform3f(light1ColorLoc, 1.0f, 0.0f, 0.0f);
-	glUniform3f(light1PosLoc, -100.0f, 16.0f, 10.0f);
+	glUniform3f(light1ColorLoc, 0.2f, 0.2f, 0.2f);
+	glUniform3f(light1PosLoc, 0.0f, -5.0f, -30.0f);
 	glUniform3f(light2ColorLoc, 0.0f, 0.0f, 1.0f);
-	glUniform3f(light2PosLoc, 20.0f, 70.0f, 5.0f);
+	glUniform3f(light2PosLoc, 40.0f, 70.0f, 5.0f);
 	glUniform3f(viewPosLoc, 0.0f, 10.0f, 0.0f);
 }
 
